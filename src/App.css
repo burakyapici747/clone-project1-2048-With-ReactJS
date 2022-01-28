@@ -1,120 +1,103 @@
 
-/*#bbada0*/
 
-/* 2 background color : #EEE4DA #776E65*/
-/* 4 background color : #EEE1C9 #776E65 */
-/* 8 background color : #F3B27A #F9F6F2*/
-/* 16 background color #F69664 */
-/* 32 background color #F77C5E */
-/* 64 background color #F75F3C */
-/* 128 background color #F9F6F2 */
-/* 256 background color #F4E4B5 */
-/*background: rgba(238, 228, 218, 0.35);*/
+*{margin: 0;padding: 0;text-decoration: none;list-style: none;box-sizing: border-box;}
 
-/*
-
-box-shadow: 0 0 30px 10px rgb(243 215 116 / 32%), inset 0 0 0 1px rgb(255 255 255 / 19%);
-
-*/
-
-*{margin: 0;padding: 0;box-sizing: border-box;}
-body{
-  background-color: #FAF8EF;
-}
-.game-container{
-  max-width: 1128px;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  margin-top: 200px;
+.container{
+    margin: auto;
+    max-width: 1128px;
+    text-align: center;
 }
 
 .gameBox{
-  border-radius: 5px;
-  height: 500px;
-  width: 500px;
-  background-color: #bbada0;
+    width: 500px;
+    height: 500px;
+    background-color: #bbada0;
+    border-radius: 5px;
+    margin-top: 150px;
+    margin-left: 350px;
+    padding: 15px;
+    position: relative;
 }
 
-.gridRow{
-  display: flex;
-  margin-top: 15px;
-  flex-direction: row;
-  justify-content: space-evenly;
+.gameRow{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
 }
 
-.gridCell{
-  background-color: #CDC1B4;
-  height: 106.25px;
-  width: 106.25px;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.gameRow:last-child{
+    margin-bottom: 0px;
 }
 
-.gridCell-2{
-  background-color: #EEE4DA;
+.gameCell{
+    margin-right: 15px;
+    border-radius: 5px;
+    width: 106.25px;
+    height: 106.25px;
+    background-color: #CDC1B4;
+    display: flex;
+    flex-direction: column;
 }
 
-.gridCell-4{
-  background-color: #EEE1C9;
+.gameCell:last-child{
+    margin: 0px;
 }
 
-.gridCell-8{
-  background-color: #F2B179;
-}
-
-.gridCell-16{
-  background-color: #F69664;
-}
-
-.gridCell-32{
-  background-color: #F77C5E;
-}
-
-.gridCell-64{
-  background-color: #F75F3C;
-}
-
-.gridCell-128{
-  background-color: #EDCC61;
-}
-
-.gridCell-256{
-  background-color: #EDCC61;
-  box-shadow: 0 0 30px 10px rgb(243 215 116 / 32%), inset 0 0 0 1px rgb(255 255 255 / 19%);
+.gameNumber{
+    width: 106.25px;
+    height: 106.25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    border-radius: 5px;
+    transition: all 0.2s;
 }
 
 .number{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  font-size: 48px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
+    font-size: 48px;
+    color: white;
+    font-weight: bolder;
 }
 
-.number-2{
-  color: #776E65;
+.number2{
+    color: #766E65;
 }
 
-.number-4{
-  color: #776E65;
+.number4{
+    color: #766E65;
 }
 
-.number-8{
-  color: #F9F6F2;
+.gameNumber2{
+    background-color: #EEE3DA;
+    color: #766E65;
 }
 
-.number-16{
-  color: #F8F6F1;
+.gameNumber4{
+    background-color: #EDDFC8;
+    color: #766E65;
 }
 
-.number-32{
-  color: #F8F6F1;
+.gameNumber8{
+    background-color: #F2B178;
+    color: white;
+}
+
+.gameNumber16{
+    background-color: #F59562;
+    color: white;
+}
+
+.gameNumber32{
+    background-color: #F57C5F;
+    color: white;
+}
+.gameNumber64{
+    background-color: #F65E3A;
+    color: white;
+}
+
+.gameNumber128{
+    background-color: #EDCF72;
+    color: white;
 }
