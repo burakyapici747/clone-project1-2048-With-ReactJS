@@ -1,0 +1,21 @@
+Yeni bir box oluşturulduğu zaman efektli bir şekilde oluştur.
+
+Birleştikleri zaman birleşme efekti uygula.
+
+Puan hesaplaması ekle.
+
+2048'e kadar olan tüm renkleri ayarla.
+
+Websitesi haline getir.
+
+Arka plana game of life eklenebilir.
+
+Ayarlar kısmı oluştur ve kullanıcı istediği box sayısını ayarlayabilsin.
+
+İlerleyen zamanlarda online hale getirilebilir.
+
+Websitesine login eklenebilir ve herkes diğer kullanıcılar ile rekabette olabilir.
+
+Sıralama eklenebilir ve herkes daha fazla rekabete girer ve oyun daha fazla oynanabilir hale gelebilir.
+
+Hile yapılmaması adine çalışmalar yap (Bu alana eklemeler yapılacak)

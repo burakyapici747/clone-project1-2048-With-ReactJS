@@ -14,7 +14,7 @@
     background-color: #bbada0;
     border-radius: 5px;
     margin-top: 150px;
-    margin-left: 350px;
+    margin-left: 50px;
     padding: 15px;
     position: relative;
 }
@@ -51,12 +51,12 @@
     justify-content: center;
     position: absolute;
     border-radius: 5px;
-    transition: all 0.2s;
+    -webkit-transition: all 0.15s ease-out;
 }
 
 .number{
     font-size: 48px;
-    color: white;
+    color: #776E65;
     font-weight: bolder;
 }
 
@@ -67,9 +67,20 @@
 .number4{
     color: #766E65;
 }
+.number8{
+    color: white;
+}
+
+.number16{
+    color: white;
+}
+.number32{
+    color: white;
+}
 
 .gameNumber2{
-    background-color: #EEE3DA;
+    background: #eee4da;
+    box-shadow: 0 0 30px 10px transparent, inset 0 0 0 1px transparent;
     color: #766E65;
 }
 
