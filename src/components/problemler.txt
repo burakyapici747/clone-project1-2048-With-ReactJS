@@ -1,3 +1,0 @@
-Birleştikleri zaman animasyonların bozulmaması için eğer sol tarafa doğru gidilecekse sağdakilerin sol tarafa gitmesi gerekiyor soldakilerin silinmesi gerekiyor.
-
-Aşağı ve yukarı kaydırmalarda birleşmelerde problemler var.
