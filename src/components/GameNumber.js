@@ -6,9 +6,15 @@ export default class GameNumber extends React.Component{
     
     render(){
         return(
-            <div id={this.props.id} style={{left: `${this.props.location.left}px`, top: `${this.props.location.top}px`}} className={`gameNumber gameNumber${this.props.val}`}>
-                <span className={`number number${this.props.val}`}>{this.props.val}</span>
+            <div id={this.props.id} style={{left: `${this.props.location.left}px`, top: `${this.props.location.top}px`}} className={`gameNumber gameNumber${this.props.value}`}>
+                <span className={`number number${this.props.value}`}>{this.props.value}</span>
             </div>
         );
     }
 }
+
+/*
+    <div id={this.props.id} style={{left: `${this.props.location.left}px`, top: `${this.props.location.top}px`}} className={`gameNumber gameNumber${this.props.val}`}>
+        <span className={`number number${this.props.val}`}>{this.props.val}</span>
+    </div>
+*/

@@ -58,24 +58,15 @@
     font-size: 48px;
     color: #776E65;
     font-weight: bolder;
+    color: white;
 }
 
 .number2{
-    color: #766E65;
+    color: #766E65!important;
 }
 
 .number4{
     color: #766E65;
-}
-.number8{
-    color: white;
-}
-
-.number16{
-    color: white;
-}
-.number32{
-    color: white;
 }
 
 .gameNumber2{
