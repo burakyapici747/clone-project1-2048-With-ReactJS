@@ -7,21 +7,30 @@ export default class GameBox extends React.Component{
       super(props);
       this.state = {
         gameMap: [
-          [0, 0, 0, 0],
-          [0, 0, 2, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          0,0,0,0,
+          0,0,0,0,
+          0,0,0,0,
+          0,0,0,0,
         ],
         gameIdMap: [
-          [0, 0, 0, 0],
-          [0, 0, 1, 0],
-          [0, 0, 0, 0],
-          [0, 0, 0, 0],
+          0,0,0,0,
+          0,0,0,0,
+          0,0,0,0,
+          0,0,0,0,
+        ],
+        arr: [
+          [0,0,0,0],
+          [0,0,0,0],
+          [0,0,0,0],
+          [0,0,0,0],
         ],
         gameNextValue: 1,
       }
       this.handleKeyDown = this.handleKeyDown.bind(this);
       this.removedData = [];
+      this.rowSize = 4;
+      this.colSize = 4;
+      this.createBox(2);
   }
   
   handleKeyDown(event){
@@ -50,19 +59,19 @@ export default class GameBox extends React.Component{
     }
   }
 
-  createRandomForBoxNumber(){//Problem yok calisiyor
+  createRandomForBoxNumber(){
     let randomRow = 0, randomCol = 0;
     let newArrForGameMap = this.state.gameMap;
     let newArrForGameIdMap = this.state.gameIdMap;
     while(!this.gameMapIsFull()){
-      randomRow = Math.floor(Math.random() * this.state.gameMap.length);
-      randomCol = Math.floor(Math.random() * this.state.gameMap[0].length);
+      randomRow = Math.floor(Math.random() * this.rowSize);
+      randomCol = Math.floor(Math.random() * this.colSize);
       if(this.isThatSlotEmpty(randomRow, randomCol)){
-        newArrForGameMap[randomRow][randomCol] = this.createRandomForNumber();
+        newArrForGameMap[this.getId(randomRow, randomCol)] = this.createRandomForNumber();
         if(this.removedData.length > 0){
-          newArrForGameIdMap[randomRow][randomCol] = this.removedData.shift();
+          newArrForGameIdMap[this.getId(randomRow, randomCol)] = this.removedData.shift();
         }else{
-          newArrForGameIdMap[randomRow][randomCol] = this.state.gameNextValue++;
+          newArrForGameIdMap[this.getId(randomRow, randomCol)] = this.state.gameNextValue++;
         }
         break;
       }
@@ -70,10 +79,11 @@ export default class GameBox extends React.Component{
     this.setState({gameMap: newArrForGameMap, gameIdMap: newArrForGameIdMap});
   }
 
-  gameMapIsFull(){//Problem yok calisiyor
-    for(let row = 0; row < this.state.gameMap.length; row++){
-      for(let col = 0; col < this.state.gameMap[0].length; col++){
-        if(this.state.gameMap[row][col] == 0){
+
+  gameMapIsFull(){
+    for(let row = 0; row < this.rowSize; row++){
+      for(let col = 0; col < this.colSize; col++){
+        if(this.state.gameMap[this.getId(row, col)] == 0){
           return false;
         }
       }
@@ -81,15 +91,16 @@ export default class GameBox extends React.Component{
     return true;
   }
 
-  isThatSlotEmpty(row, col){//Problem yok calisiyor
-    if(this.state.gameMap[row][col] == 0){
+  isThatSlotEmpty(row, col){
+    if(this.state.gameMap[this.getId(row, col)] == 0){
       return true;
     }else{
       return false;
     }
+    
   }
 
-  createRandomForNumber(numberOptions = {numbers: [2, 4], percent: [90, 10]}){//Problem yok calisiyor
+  createRandomForNumber(numberOptions = {numbers: [2, 4], percent: [90, 10]}){
     let randomForPercent = Math.floor(Math.random() * (100 - 1) ) + 1;
     let _randomForPercentBuffer = 0;
     for(let i = 0; i < numberOptions.percent.length; i++){
@@ -100,7 +111,7 @@ export default class GameBox extends React.Component{
     }
   }
 
-  calculateLocation(row, col){//Düzeltmeler yapılacak!!!!!!!!!!!!
+  calculateLocation(row, col){
     let location = {
       top: ((row * 106.25) + (row+1) * 15),
       left: ((col * 106.25) + (col+1) * 15),
@@ -109,191 +120,193 @@ export default class GameBox extends React.Component{
   }
 
   getValue(){
-    return this.state.gameMap
+  }
+
+  getId(row, col){
+    return ((this.rowSize * row) + col);
+  }
+
+  getColAndRow(id){
+    let row = Math.floor(id / this.rowSize);
+    let col = Math.floor(id % this.colSize);
+    return {row: row, col: col};
   }
 
   slipToRight(){
     let _bufferGameMapArr = this.state.gameMap;
     let _bufferGameIdMapArr = this.state.gameIdMap;
     let _currentIndexBuffer = 3;
-    for(let row = 0; row < _bufferGameMapArr.length; row++){
+    for(let row = 0; row < this.rowSize; row++){
       _currentIndexBuffer = 3;
-      for(let col = _bufferGameMapArr.length - 2; col >= 0; col--){
-        if(_bufferGameMapArr[row][col] != 0){
+      for(let col = this.colSize - 2; col >= 0; col--){
+        if(_bufferGameMapArr[this.getId(row, col)] != 0){
           for(let bufferIndexNumber = col; bufferIndexNumber < _currentIndexBuffer; bufferIndexNumber++){
-            if(_bufferGameMapArr[row][bufferIndexNumber] == _bufferGameMapArr[row][bufferIndexNumber + 1]){
+            if(_bufferGameMapArr[this.getId(row, bufferIndexNumber)] == _bufferGameMapArr[this.getId(row, bufferIndexNumber + 1)]){
               //gameMapArr
-              _bufferGameMapArr[row][bufferIndexNumber + 1] = _bufferGameMapArr[row][bufferIndexNumber + 1] + _bufferGameMapArr[row][bufferIndexNumber];
-              _bufferGameMapArr[row][bufferIndexNumber] = 0;
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber + 1)] = _bufferGameMapArr[this.getId(row, bufferIndexNumber + 1)] + _bufferGameMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber)] = 0;
               
               //gameIdMapArr
-              this.removedData.push(_bufferGameIdMapArr[row][bufferIndexNumber + 1]);
-              _bufferGameIdMapArr[row][bufferIndexNumber + 1] = _bufferGameIdMapArr[row][bufferIndexNumber];
-              _bufferGameIdMapArr[row][bufferIndexNumber] = 0;
+              this.removedData.push(_bufferGameIdMapArr[this.getId(row, bufferIndexNumber + 1)]);
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber + 1)] = _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)] = 0;
 
               _currentIndexBuffer--;
-            }else if((_bufferGameMapArr[row][bufferIndexNumber] != _bufferGameMapArr[row][bufferIndexNumber + 1]) && (_bufferGameMapArr[row][bufferIndexNumber + 1] != 0)){
+            }else if(_bufferGameMapArr[this.getId(row, bufferIndexNumber)] != _bufferGameMapArr[this.getId(row, bufferIndexNumber + 1)] && (_bufferGameMapArr[this.getId(row, bufferIndexNumber + 1)] != 0)){
               _currentIndexBuffer--;
-            }else if( _bufferGameMapArr[row][bufferIndexNumber + 1] == 0){
+            }else if( _bufferGameMapArr[this.getId(row, bufferIndexNumber + 1)]== 0){
               //gameMapArr
-              _bufferGameMapArr[row][bufferIndexNumber + 1] = _bufferGameMapArr[row][bufferIndexNumber];
-              _bufferGameMapArr[row][bufferIndexNumber] = 0;
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber + 1)] = _bufferGameMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber)] = 0;
               //gameIdMapArr
-              _bufferGameIdMapArr[row][bufferIndexNumber + 1] = _bufferGameIdMapArr[row][bufferIndexNumber];
-              _bufferGameIdMapArr[row][bufferIndexNumber] = 0;
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber + 1)] = _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)] = 0;
             }
           }
         }
       }
     }
     this.setState({gameMap: _bufferGameMapArr, gameIdMap: _bufferGameIdMapArr});
-    //this.createBox(1);
+    this.createBox(1); 
   }
 
   slipToLeft(){
     let _bufferGameMapArr = this.state.gameMap;
     let _bufferGameIdMapArr = this.state.gameIdMap;
     let _currentIndexBuffer = 0;
-    for(let row = 0; row < _bufferGameMapArr.length; row++){
+    for(let row = 0; row < this.rowSize; row++){
       _currentIndexBuffer = 0;
-      for(let col = 1; col < _bufferGameMapArr.length; col++){
-        if(_bufferGameMapArr[row][col] != 0){
+      for(let col = 1; col < this.colSize; col++){
+        if(_bufferGameMapArr[this.getId(row, col)] != 0){
           for(let bufferIndexNumber = col; bufferIndexNumber > _currentIndexBuffer; bufferIndexNumber--){
-            if(_bufferGameMapArr[row][bufferIndexNumber] == _bufferGameMapArr[row][bufferIndexNumber - 1]){
+            if(_bufferGameMapArr[this.getId(row, bufferIndexNumber)] == _bufferGameMapArr[this.getId(row, bufferIndexNumber - 1)]){
 
               //gameMapArr
-              _bufferGameMapArr[row][bufferIndexNumber - 1] = _bufferGameMapArr[row][bufferIndexNumber - 1] + _bufferGameMapArr[row][bufferIndexNumber];
-              _bufferGameMapArr[row][bufferIndexNumber] = 0;
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber -1)] = _bufferGameMapArr[this.getId(row, bufferIndexNumber - 1)] + _bufferGameMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber)] = 0;
               
               //gameIdMapArr
-              this.removedData.push(_bufferGameIdMapArr[row][bufferIndexNumber - 1]);
-              _bufferGameIdMapArr[row][bufferIndexNumber - 1] = _bufferGameIdMapArr[row][bufferIndexNumber];
-              _bufferGameIdMapArr[row][bufferIndexNumber] = 0;
-
+              this.removedData.push(_bufferGameIdMapArr[this.getId(row, bufferIndexNumber - 1)]);
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber - 1)] = _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)] = 0;
 
               _currentIndexBuffer++;
-            }else if((_bufferGameMapArr[row][bufferIndexNumber] != _bufferGameMapArr[row][bufferIndexNumber - 1]) && (_bufferGameMapArr[row][bufferIndexNumber - 1] != 0)){
+            }else if((_bufferGameMapArr[this.getId(row, bufferIndexNumber)] != _bufferGameMapArr[this.getId(row, bufferIndexNumber - 1)]) && (_bufferGameMapArr[this.getId(row, bufferIndexNumber - 1)] != 0)){
               _currentIndexBuffer++;
-            }else if( _bufferGameMapArr[row][bufferIndexNumber - 1] == 0){
+            }else if( _bufferGameMapArr[this.getId(row, bufferIndexNumber - 1)] == 0){
               //gameMapArr
-              _bufferGameMapArr[row][bufferIndexNumber - 1] = _bufferGameMapArr[row][bufferIndexNumber];
-              _bufferGameMapArr[row][bufferIndexNumber] = 0;
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber - 1)] = _bufferGameMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameMapArr[this.getId(row, bufferIndexNumber)] = 0;
               //gameIdMapArr
-              _bufferGameIdMapArr[row][bufferIndexNumber - 1] = _bufferGameIdMapArr[row][bufferIndexNumber];
-              _bufferGameIdMapArr[row][bufferIndexNumber] = 0;
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber - 1)] = _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)];
+              _bufferGameIdMapArr[this.getId(row, bufferIndexNumber)] = 0;
             }
           }
         }
       }
     }
     this.setState({gameMap: _bufferGameMapArr, gameIdMap: _bufferGameIdMapArr});
-    //this.createBox(1);
+    this.createBox(1);
   }
 
   slipToTop(){
     let _bufferGameMapArr = this.state.gameMap;
     let _bufferGameIdMapArr = this.state.gameIdMap;
     let _currentIndexBuffer = 0;
-    for(let row = 0; row < _bufferGameMapArr.length; row++){
-      for(let col = 0; col < _bufferGameMapArr.length; col++){
+    for(let row = 0; row < this.rowSize; row++){
+      for(let col = 0; col < this.colSize; col++){
         _currentIndexBuffer = 0;
-        if(_bufferGameMapArr[row][col] != 0){
+        if(_bufferGameMapArr[this.getId(row, col)] != 0){
           for(let bufferIndexNumber = row; bufferIndexNumber > _currentIndexBuffer; bufferIndexNumber--){
-            if(_bufferGameMapArr[bufferIndexNumber][col] == _bufferGameMapArr[bufferIndexNumber - 1][col]){
+            if(_bufferGameMapArr[this.getId(bufferIndexNumber, col)] == _bufferGameMapArr[this.getId(bufferIndexNumber - 1, col)]){
               //gameMapArr
-              _bufferGameMapArr[bufferIndexNumber - 1][col] = _bufferGameMapArr[bufferIndexNumber - 1][col] + _bufferGameMapArr[bufferIndexNumber][col];
-              _bufferGameMapArr[bufferIndexNumber][col] = 0;
-             
+              _bufferGameMapArr[this.getId(bufferIndexNumber - 1, col)] = _bufferGameMapArr[this.getId(bufferIndexNumber - 1, col)] + _bufferGameMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameMapArr[this.getId(bufferIndexNumber, col)] = 0;
              
               //gameIdMapArr
-              this.removedData.push(_bufferGameIdMapArr[bufferIndexNumber - 1][col]);
-              _bufferGameIdMapArr[bufferIndexNumber - 1][col] = _bufferGameIdMapArr[bufferIndexNumber][col];
-              _bufferGameIdMapArr[bufferIndexNumber][col] = 0;
+              this.removedData.push(_bufferGameIdMapArr[this.getId(bufferIndexNumber - 1, col)]);
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber - 1, col)] = _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)] = 0;
 
               _currentIndexBuffer++;
-              this.setState({gameMap: _bufferGameMapArr, gameIdMap: _bufferGameIdMapArr});
-            }else if((_bufferGameMapArr[bufferIndexNumber][col] != _bufferGameMapArr[bufferIndexNumber - 1][col]) && (_bufferGameMapArr[bufferIndexNumber - 1][col] != 0)){
+            }else if((_bufferGameMapArr[this.getId(bufferIndexNumber, col)] != _bufferGameMapArr[this.getId(bufferIndexNumber - 1, col)]) && (_bufferGameMapArr[this.getId(bufferIndexNumber - 1, col)] != 0)){
               _currentIndexBuffer++;
-            }else if( _bufferGameMapArr[bufferIndexNumber - 1][col] == 0){
+            }else if( _bufferGameMapArr[this.getId(bufferIndexNumber - 1, col)] == 0){
               //gameMapArr
-              _bufferGameMapArr[bufferIndexNumber - 1][col] = _bufferGameMapArr[bufferIndexNumber][col];
-              _bufferGameMapArr[bufferIndexNumber][col] = 0;
+              _bufferGameMapArr[this.getId(bufferIndexNumber - 1, col)] = _bufferGameMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameMapArr[this.getId(bufferIndexNumber, col)] = 0;
               //gameIdMapArr
-              _bufferGameIdMapArr[bufferIndexNumber - 1][col] = _bufferGameIdMapArr[bufferIndexNumber][col];
-              _bufferGameIdMapArr[bufferIndexNumber][col] = 0;
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber - 1, col)] = _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)] = 0;
             }
           }
         }
       }
     }
     this.setState({gameMap: _bufferGameMapArr, gameIdMap: _bufferGameIdMapArr});
-    //this.createBox(1);
+    this.createBox(1);
   }
 
   slipToBottom(){
     let _bufferGameMapArr = this.state.gameMap;
     let _bufferGameIdMapArr = this.state.gameIdMap;
     let _currentIndexBuffer = 3;
-    for(let row = _bufferGameMapArr.length - 1; row >= 0; row--){
-      for(let col = 0; col < _bufferGameMapArr.length; col++){
-        _currentIndexBuffer = 3;
-        if(_bufferGameMapArr[row][col] != 0){
+    for(let row = this.rowSize - 1; row >= 0; row--){
+      for(let col = 0; col < this.rowSize; col++){
+        _currentIndexBuffer = 3;  
+        if(_bufferGameMapArr[this.getId(row, col)] != 0){
           for(let bufferIndexNumber = row; bufferIndexNumber < _currentIndexBuffer; bufferIndexNumber++){
-            if(_bufferGameMapArr[bufferIndexNumber][col] == _bufferGameMapArr[bufferIndexNumber + 1][col]){
+            if(_bufferGameMapArr[this.getId(bufferIndexNumber, col)] == _bufferGameMapArr[this.getId(bufferIndexNumber + 1, col)]){
               //gameMapArr
-              _bufferGameMapArr[bufferIndexNumber + 1][col] = _bufferGameMapArr[bufferIndexNumber + 1][col] + _bufferGameMapArr[bufferIndexNumber][col];
-              _bufferGameMapArr[bufferIndexNumber][col] = 0;
-             
+              _bufferGameMapArr[this.getId(bufferIndexNumber + 1, col)] = _bufferGameMapArr[this.getId(bufferIndexNumber + 1, col)] + _bufferGameMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameMapArr[this.getId(bufferIndexNumber, col)] = 0;
 
-              this.removedData.push(_bufferGameIdMapArr[bufferIndexNumber + 1][col]);
-              _bufferGameIdMapArr[bufferIndexNumber + 1][col] = _bufferGameIdMapArr[bufferIndexNumber][col];
-              _bufferGameIdMapArr[bufferIndexNumber][col] = 0;
+              this.removedData.push(_bufferGameIdMapArr[this.getId(bufferIndexNumber + 1, col)]);
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber + 1, col)] = _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)] = 0;
 
               _currentIndexBuffer--;
-            }else if((_bufferGameMapArr[bufferIndexNumber][col] != _bufferGameMapArr[bufferIndexNumber + 1][col]) && (_bufferGameMapArr[bufferIndexNumber + 1][col] != 0)){
+            }else if((_bufferGameMapArr[this.getId(bufferIndexNumber, col)] != _bufferGameMapArr[this.getId(bufferIndexNumber + 1, col)]) && (_bufferGameMapArr[this.getId(bufferIndexNumber + 1, col)] != 0)){
               _currentIndexBuffer--;
-            }else if( _bufferGameMapArr[bufferIndexNumber + 1][col] == 0){
+            }else if( _bufferGameMapArr[this.getId(bufferIndexNumber + 1, col)] == 0){
               //gameMapArr
-              _bufferGameMapArr[bufferIndexNumber + 1][col] = _bufferGameMapArr[bufferIndexNumber][col];
-              _bufferGameMapArr[bufferIndexNumber][col] = 0;
+              _bufferGameMapArr[this.getId(bufferIndexNumber + 1, col)] = _bufferGameMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameMapArr[this.getId(bufferIndexNumber, col)] = 0;
               //gameIdMapArr
-              _bufferGameIdMapArr[bufferIndexNumber + 1][col] = _bufferGameIdMapArr[bufferIndexNumber][col];
-              _bufferGameIdMapArr[bufferIndexNumber][col] = 0;
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber + 1, col)] = _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)];
+              _bufferGameIdMapArr[this.getId(bufferIndexNumber, col)] = 0;
             }
           }
         }
       }
     }
     this.setState({gameMap: _bufferGameMapArr, gameIdMap: _bufferGameIdMapArr});
-    //this.createBox(1);
+    this.createBox(1);
   }
-
+  
   render(){
     return(
       <div className="gameBox">
-        {this.state.gameMap.map(
-          (element, index) => {
-            return(
-              <GameRow key={index} id={index} value={element}/>
-            );
-          }
-        )}
         {
-          this.state.gameIdMap.map(            
-            (row, rowKey) => {
+          this.state.arr.map(
+            (val, index) => {
               return(
-                row.map(
-                  (col, colKey) =>{
-                    if(row[colKey] != 0){
-                      return(
-                        <GameNumber key={this.state.gameIdMap[rowKey][colKey]} id={this.state.gameIdMap[rowKey][colKey]} location={this.calculateLocation(rowKey, colKey)} val={this.getValue()[rowKey][colKey]}/>
-                      )
-                    }
-                  }
-                )
+                <GameRow key={index} id={index} value={val}/>
               )
             }
           )
+        }
+        {
+          this.state.gameIdMap.map(
+            (val, index) => {
+              if(val != 0){
+                return(
+                  <GameNumber key={val} id={val} location={this.calculateLocation(this.getColAndRow(index).row, this.getColAndRow(index).col)} value={this.state.gameMap[index]}/>
+                )
+              }
+            }
+          )
+          
         }
       </div>
     );
