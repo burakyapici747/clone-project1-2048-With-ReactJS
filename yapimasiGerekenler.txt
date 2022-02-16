@@ -1,5 +1,0 @@
-ikisi birbirinden farklıysa 
-
-aynıysalar
-
-0'a eşitse
